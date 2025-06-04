@@ -1,32 +1,3 @@
-becca44
-becca446162
-En ligne
-
-boris9306 — 09:37
--------------------------------------------------------------------------
-ATELIER 1 : CMAKE
--------------------------------------------------------------------------
-L'automatisation de la compilation, pipeline de tests
-Cliquez sur ce lien  et suivez les instructions : https://github.com/OpenRSI/Atelier_CMAKE
-Travail demandé : Coller l'URL de votre Repository GitHub dans la discussion général de ce Discord
-boris9306 — 14:12
-------------------------------------------------------------------------
-ATELIER 2 : Industrialisation continu d'un serveur Web (Flask - Python)
-------------------------------------------------------------------------
-Automatisation du déploiement de code Web.
-Cliquez sur ce lien et suivez les instructions : https://github.com/OpenRSI/Flask_Hello_World
-boris9306 — 15:54
-------------------------------------------------------------------------
-ATELIER 3 : Industrialisation continu d'un serveur Web temporaire 
-------------------------------------------------------------------------
-Votre action va créer une image docker (via Dockerfile) pour permettre de faire fonctionner votre serveur Flask.
-Ce serveur Flask exposera le contenu de votre Repository GitHub sur Internet (Preview) via la solution ngrok qui vous fournira un DNS.
-Le lien Internet temporaire sera accessible (visible depuis les logs de votre action) pendant 120 seconde
-boris9306 — 16:33
-Atelier 3bis : Puisque vous exposez temporairement des API, profitez en pour les tests avec la bibliothèque pytest
-Si l'API est opérationnelle alors vous aurrez un code 200 dans vos logs
-boris9306 — 17:09
-Correction :
 name: Docker + ngrok + Tests pytest
 on: 
   push:
