@@ -1,0 +1,58 @@
+name: 🚀 Déploiement Flask Temporaire
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout du code
+      uses: actions/checkout@v3
+      
+    - name: 🐳 Configuration Docker Buildx
+      uses: docker/setup-buildx-action@v2
+      
+    - name: 🔨 Construction de l'image Docker
+      run: |
+        echo "🔨 Construction de l'image Docker..."
+        docker build -t flask-temp-server .
+        
+    - name: 🚀 Démarrage du serveur temporaire
+      env:
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+      run: |
+        echo "🚀 Démarrage du conteneur Docker..."
+        docker run --rm \
+          -e NGROK_TOKEN=$NGROK_TOKEN \
+          -e REPO_URL=${{ github.server_url }}/${{ github.repository }} \
+          --name flask-temp \
+          flask-temp-server &
+        
+        # Attendre un peu pour que ngrok se lance
+        sleep 10
+        
+        # Récupérer l'URL ngrok depuis les logs du conteneur
+        echo "🔍 Récupération de l'URL ngrok..."
+        timeout 5 docker logs -f flask-temp 2>&1 | grep -E "https://.*\.ngrok\.io" | head -1 || echo "URL ngrok non trouvée dans les logs"
+        
+        # Attendre les 120 secondes complètes
+        echo "⏰ Attente de 120 secondes..."
+        sleep 120
+        
+        echo "🛑 Arrêt du conteneur..."
+        docker stop flask-temp 2>/dev/null || true
+        
+    - name: 📊 Résumé du déploiement
+      run: |
+        echo "✅ Déploiement terminé"
+        echo "📊 Statistiques:"
+        echo "   - Repository: ${{ github.repository }}"
+        echo "   - Commit: ${{ github.sha }}"
+        echo "   - Branch: ${{ github.ref_name }}"
+        echo "   - Durée: 120 secondes"
